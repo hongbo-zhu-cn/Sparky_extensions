@@ -5,11 +5,6 @@
 #
 import os
 import sys
-import time
-import threading
-import sched
-import Queue
-
 import Tkinter
 
 # Sparky packages
@@ -48,17 +43,23 @@ class OpenReloadDialog(tkutil.Dialog):
         br.frame.pack(side = 'top', anchor = 'nw')
 
         self.paths      = None  # list of spectrum files to open
-       
+        self.spectra    = []    # spectra already opened
 
     def open_spectra(self):
         """ Open specified spectrum files 
         """
         bad_paths = []
-
         for path in self.paths:  # open each
 
-            if self.session.open_spectrum(path) == None:
+            spectrum = self.session.open_spectrum(path)
+            print spectrum.__dict__
+            if spectrum is None:
                 bad_paths.append(path)
+            else:
+                self.spectra.append(spectrum)
+                
+        print 'spectra list:', self.session.project.spectrum_list()
+        print 'view list:', self.session.project.view_list()
 
         if bad_paths:
             message = 'Could not open files:'
@@ -80,6 +81,12 @@ class OpenReloadDialog(tkutil.Dialog):
         """ Force the opened files to be reloaded
         """
         if self.paths:
+            if self.spectra: # if spectra have been opend
+                             # destroy them first
+                for v in self.session.project.view_list():
+                    if v.spectrum in self.spectra:
+                        v.destroy()
+                        
             self.open_spectra()
         else:  # click on reload before any spectra are loaded. 
                # Cannot make the button grey because it is a poorly 
