@@ -21,7 +21,7 @@ class OpenReloadDialog(tkutil.Dialog):
         """
         self.session = session
         tkutil.Dialog.__init__(self, session.tk,
-                               'Open & Autoreload Multiple Spectra')
+                               'Open & Reload Multiple Spectra')
         
         proj = session.project
         mfs = tkutil.multiple_file_selection(self.top, proj.sparky_directory)
@@ -94,6 +94,8 @@ class OpenReloadDialog(tkutil.Dialog):
     def close_cb(self):
         """ Cancel button is clicked. 
         """
+        self.paths = None
+        self.spectra = []
         tkutil.Dialog.close_cb(self)
 
 
