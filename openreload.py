@@ -45,6 +45,7 @@ class OpenReloadDialog(tkutil.Dialog):
         self.paths      = None  # list of spectrum files to open
         self.spectra    = []    # spectra already opened
 
+
     def open_spectra(self):
         """ Open specified spectrum files 
         """
@@ -52,15 +53,11 @@ class OpenReloadDialog(tkutil.Dialog):
         for path in self.paths:  # open each
 
             spectrum = self.session.open_spectrum(path)
-            print spectrum.__dict__
             if spectrum is None:
                 bad_paths.append(path)
             else:
                 self.spectra.append(spectrum)
                 
-        print 'spectra list:', self.session.project.spectrum_list()
-        print 'view list:', self.session.project.view_list()
-
         if bad_paths:
             message = 'Could not open files:'
             for path in bad_paths:
