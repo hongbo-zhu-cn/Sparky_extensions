@@ -42,9 +42,14 @@ class OpenReloadDialog(tkutil.Dialog):
                                )
         br.frame.pack(side = 'top', anchor = 'nw')
 
-        self.paths      = None  # list of spectrum files to open
+        self.paths      = []    # list of spectrum files to open
         self.spectra    = []    # spectra already opened
 
+        # if there are opened windows, get the paths
+        for v in proj.view_list():
+            self.paths.append(v.spectrum.save_path)
+            self.spectra.append(v.spectrum)
+            
 
     def open_spectra(self):
         """ Open specified spectrum files 
@@ -94,7 +99,7 @@ class OpenReloadDialog(tkutil.Dialog):
     def close_cb(self):
         """ Cancel button is clicked. 
         """
-        self.paths = None
+        self.paths = []
         self.spectra = []
         tkutil.Dialog.close_cb(self)
 
